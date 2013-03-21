@@ -11,21 +11,48 @@
 		================================================== -->
 		<meta charset="utf-8">
 		<title>Conception Connection</title>
-		<meta name="description" content="">
-		<meta name="author" content="">
+		<meta name="description" content="Conception Connection - The app that figures out which world event led to your parents getting frisky">
+		<meta name="author" content="Maarten van Grootel">
 
 		<!-- Mobile Specific Metas
 		================================================== -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 		<!-- CSS
 		================================================== -->
 		<link rel="stylesheet" href="stylesheets/base.css">
 		<link rel="stylesheet" href="stylesheets/skeleton.css">
 		<link rel="stylesheet" href="stylesheets/layout.css">
-		
-		 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#date").datepicker({
+					dateFormat:"yy-mm-dd",
+					changeMonth:true,
+					changeYear:true,
+					maxDate: "+1D"
+				});
+			});
+		</script>
+		<style>
+			body {
+				background-color: #AACAFB;
+			}
+			
+			.container {
+				margin-top: 10%;
+				background-color: #fff;
+				border: 7px solid #000;
+				-moz-border-radius: 20px;
+			    -webkit-border-radius: 20px;
+			    -khtml-border-radius: 20px;
+			    border-radius: 20px;
+			}
+			
+		</style>
 		<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -33,14 +60,35 @@
 	<body>
 		<div class="container">
 			<div class="sixteen columns">
-				<form action="/" method="post">
-					Birthday:
-					<input type="text" name="date" />
+				<h1>Conception Connection</h1>
+				<p>
+					We calculate your approximate date of conception, and from that we determine the historical event that most likely 
+					led to your parents having unprotected sex!
+				</p>
+			</div>
+			<div class="sixteen columns">
+				<form id="conception-form" action="/" method="post">
+					<label for="date">Enter your date of birth</label>
+					<input id="date" type="text" name="date" value="1982-03-05" class="datepicker" />
 
-					<input type="submit" name="submit" value="Send!"  />
+					<input class="inline" type="submit" name="submit" value="Find out why your parents were feeling frisky!"  />
 				</form>
 			</div>
-
+			<div class="ten columns">
+				<p>&nbsp;</p>
+			</div>
+			<div class="six columns">
+				<ol>
+					<li>
+						Idea from <a href="http://www.smbc-comics.com/index.php?db=comics&id=2922#comic">this comic</a>
+						created by the amazing <a href="http://www.smbc-comics.com/">Saterday Morning Breakfast Cereal</a>
+					</li>
+					<li>
+						Data from <a href="http://www.wikipedia.com">Wikipedia</a>
+					</li>
+				</ol>
+			</div>
+			
 		</div><!-- container -->
 	</body>
 </html>
