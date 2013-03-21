@@ -14,7 +14,7 @@ class Event
 end
 
 DataMapper::Logger.new(STDOUT, :debug)
-DataMapper.setup(:default, "postgres://conception:Test1234@localhost/conception")
+DataMapper.setup(:default, ENV['DATABASE_URL'] || "postgres://conception:Test1234@localhost/conception")
 
 get '/' do
   erb :index
@@ -24,8 +24,9 @@ post '/' do
   begin
     date = Date.parse(params[:date]) << 9
 
-    event = Event.all(:date.lte => date, :date.gt => date - 14, :order => [ :date.desc ])[0]
-    if event
+    eventlist = Event.all(:date.lte => date, :date.gt => date - 14, :order => [ :date.desc ])[0,4]
+    if eventlist
+      event = eventlist.sample
       "Most likely historical event that aroused your parents<br /> #{event[:date]}: #{event[:description]}"
     else
       "Nothing significant happend in the two weeks before your conception around #{date}."
@@ -33,4 +34,22 @@ post '/' do
   rescue ArgumentError
     halt 500, 'Illegal date'
   end
+end
+
+get '/scrape' do
+  DataMapper.auto_migrate!
+  
+  doc = Nokogiri::parse(open('/home/maarten/Documents/data/data.xml'))
+  doc.xpath('//event').each do |event|
+    begin
+      date = Date.parse(event.xpath('date').text)
+      description = event.xpath('description').text.strip()
+      #dates[date] = [] unless dates[date]
+      #dates[date] << description
+      Event.create(:date => date, :description => description)
+    rescue ArgumentError
+
+    end
+  end
+  "Done!"
 end
