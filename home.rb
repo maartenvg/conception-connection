@@ -13,7 +13,6 @@ class Event
   property :description,  String ,  :length => 250
 end
 
-DataMapper::Logger.new(STDOUT, :debug)
 DataMapper.setup(:default, ENV['DATABASE_URL'] || "postgres://conception:Test1234@localhost/conception")
 
 get '/' do
@@ -25,11 +24,11 @@ post '/' do
     date = Date.parse(params[:date]) << 9
 
     eventlist = Event.all(:date.lte => date, :date.gt => date - 14, :order => [ :date.desc ])[0,4]
-    if eventlist
+    unless eventlist.empty?
       event = eventlist.sample
-      "Most likely historical event that aroused your parents<br /> #{event[:date]}: #{event[:description]}"
+      erb :result, :locals => {:date => event[:date], :description => event[:description] }
     else
-      "Nothing significant happend in the two weeks before your conception around #{date}."
+      erb :bored, :locals => {:date => date}
     end
   rescue ArgumentError
     halt 500, 'Illegal date'

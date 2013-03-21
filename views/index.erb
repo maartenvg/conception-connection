@@ -23,6 +23,7 @@
 		<link rel="stylesheet" href="stylesheets/base.css">
 		<link rel="stylesheet" href="stylesheets/skeleton.css">
 		<link rel="stylesheet" href="stylesheets/layout.css">
+		<link rel="stylesheet" href="stylesheets/site.css">
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
@@ -35,46 +36,46 @@
 					changeYear:true,
 					maxDate: "+1D"
 				});
+				
+				$('#conception-form').submit(function(event){
+					 /* stop form from submitting normally */
+					event.preventDefault();
+					
+					var result = $.post("/", $(this).serialize());
+					
+					result.done(function(data){
+						$("#result").empty().html(data)
+					});
+				});
 			});
 		</script>
-		<style>
-			body {
-				background-color: #AACAFB;
-			}
-			
-			.container {
-				margin-top: 10%;
-				background-color: #fff;
-				border: 7px solid #000;
-				-moz-border-radius: 20px;
-			    -webkit-border-radius: 20px;
-			    -khtml-border-radius: 20px;
-			    border-radius: 20px;
-			}
-			
-		</style>
+		
 		<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 	</head>
 	<body>
+		<header class="container">
+			<div class="sixteen columns">
+				<h1>CONCEPTION CONNECTION</h1>
+			</div>
+		</header>
 		<div class="container">
 			<div class="sixteen columns">
-				<h1>Conception Connection</h1>
-				<p>
-					We calculate your approximate date of conception, and from that we determine the historical event that most likely 
+				<h2>
+					We calculate your approximate date of conception, and from that we can determine the historical event that most likely 
 					led to your parents having unprotected sex!
-				</p>
+				</h2>
 			</div>
 			<div class="sixteen columns">
-				<form id="conception-form" action="/" method="post">
+				<form id="conception-form">
 					<label for="date">Enter your date of birth</label>
-					<input id="date" type="text" name="date" value="1982-03-05" class="datepicker" />
+					<input id="date" style="display:inline;" type="text" name="date" value="1982-03-05" class="datepicker" />
 
-					<input class="inline" type="submit" name="submit" value="Find out why your parents were feeling frisky!"  />
+					<input style="display: inline;" type="submit" value="Find out why your parents were feeling frisky!"  />
 				</form>
 			</div>
-			<div class="ten columns">
+			<div id="result" class="ten columns">
 				<p>&nbsp;</p>
 			</div>
 			<div class="six columns">
