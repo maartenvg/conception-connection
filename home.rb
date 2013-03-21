@@ -13,7 +13,8 @@ class Event
   property :description,  String ,  :length => 250
 end
 
-DataMapper.setup(:default, ENV['DATABASE_URL'] || "postgres://conception:Test1234@localhost/conception")
+#DataMapper.setup(:default, ENV['DATABASE_URL'] || "postgres://conception:Test1234@localhost/conception")
+DataMapper.setup(:default, "sqlite::memory:")
 
 get '/' do
   erb :index
@@ -38,14 +39,17 @@ end
 get '/scrape' do
   DataMapper.auto_migrate!
   
-  doc = Nokogiri::parse(open('/home/maarten/Documents/data/data.xml'))
+  doc = Nokogiri::parse(open(File.expand_path(File.dirname(__FILE__)) + '/data/data.xml'))
+  cnt = 0
   doc.xpath('//event').each do |event|
     begin
+      cnt += 1
       date = Date.parse(event.xpath('date').text)
       description = event.xpath('description').text.strip()
       #dates[date] = [] unless dates[date]
       #dates[date] << description
       Event.create(:date => date, :description => description)
+      puts cnt   if cnt % 1000 == 0 
     rescue ArgumentError
 
     end
