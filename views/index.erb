@@ -31,25 +31,20 @@
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$("#date").datepicker({
-					dateFormat:"yy-mm-dd",
-					changeMonth:true,
-					changeYear:true,
-					maxDate: "+1D"
+					dateFormat:"yy-mm-dd",changeMonth:true,changeYear:true,maxDate:"+1D"
 				});
-				
-				$('#conception-form').submit(function(event){
-					 /* stop form from submitting normally */
+				$('#conception-form').submit(function(event) {
 					event.preventDefault();
 					
-					var result = $.post("/", $(this).serialize());
+					var result=$.post("/",$(this).serialize());
 					
-					result.done(function(data){
+					result.done(function(data) {
 						$("#result").empty().html(data)
 					});
 				});
 			});
 		</script>
-		
+
 		<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -60,14 +55,13 @@
 				<h1>CONCEPTION CONNECTION</h1>
 			</div>
 		</header>
-		<div class="container">
+		<div class="container" id="main">
 			<div class="sixteen columns">
-				<h2>
-					Determine the historical event that	led to your parents having <i>fun</i> and creating you!
-				</h2>
+				<h3> We calculate your approximate date of conception. Then we determine the historical event most likely
+				to have led to your parents having unprotected sex! </h3>
 			</div>
 			<div class="sixteen columns">
-				<form id="conception-form">
+				<form id="conception-form" style="padding-left: 15%">
 					<label for="date">Enter your date of birth</label>
 					<input id="date" style="display:inline;" type="text" name="date" value="1982-03-05" class="datepicker" />
 
@@ -75,12 +69,14 @@
 				</form>
 			</div>
 			<div id="result" class="ten columns">
-				<p>&nbsp;</p>
+				<p>
+					&nbsp;
+				</p>
 			</div>
 			<div class="six columns">
 				<ol>
 					<li>
-						Idea from <a href="http://www.smbc-comics.com/index.php?db=comics&id=2922#comic">this comic</a>
+						Inspired from <a href="http://www.smbc-comics.com/index.php?db=comics&id=2922#comic">this comic</a>
 						created by the amazing <a href="http://www.smbc-comics.com/">Saturday Morning Breakfast Cereal</a>
 					</li>
 					<li>
@@ -88,7 +84,7 @@
 					</li>
 				</ol>
 			</div>
-			
+
 		</div><!-- container -->
 	</body>
 </html>

@@ -54,8 +54,7 @@ get '/scrape' do
       cnt += 1
       date = Date.parse(event.xpath('date').text)
       description = event.xpath('description').text.strip()
-      #dates[date] = [] unless dates[date]
-      #dates[date] << description
+
       Event.create(:date => date, :description => description)
       puts cnt   if cnt % 1000 == 0
     rescue ArgumentError
