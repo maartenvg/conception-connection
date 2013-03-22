@@ -13,8 +13,16 @@ class Event
   property :description,  String ,  :length => 250
 end
 
-#DataMapper.setup(:default, ENV['DATABASE_URL'] || "postgres://conception:Test1234@localhost/conception")
-DataMapper.setup(:default, "sqlite::memory:")
+if ENV['VCAP_SERVICES'].nil?
+  DataMapper::setup(:default, "postgres://conception:Test1234@localhost/conception")
+else
+  require 'json'
+  svcs = JSON.parse ENV['VCAP_SERVICES']
+  pgsql = svcs.detect { |k,v| k =~ /^postgresql/ }.last.first
+  creds = pgsql['credentials']
+  user, pass, host, name = %w(user password host name).map { |key| creds[key] }
+  DataMapper.setup(:default, "postgres://#{user}:#{pass}@#{host}/#{name}")
+end
 
 get '/' do
   erb :index
@@ -38,7 +46,7 @@ end
 
 get '/scrape' do
   DataMapper.auto_migrate!
-  
+
   doc = Nokogiri::parse(open(File.expand_path(File.dirname(__FILE__)) + '/data/data.xml'))
   cnt = 0
   doc.xpath('//event').each do |event|
@@ -49,7 +57,7 @@ get '/scrape' do
       #dates[date] = [] unless dates[date]
       #dates[date] << description
       Event.create(:date => date, :description => description)
-      puts cnt   if cnt % 1000 == 0 
+      puts cnt   if cnt % 1000 == 0
     rescue ArgumentError
 
     end
